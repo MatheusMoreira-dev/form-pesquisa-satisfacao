@@ -1,5 +1,11 @@
+import FormCarteirinha from "@/features/validacaoCarteirinha/components/FormCarteirinha";
+
 function ValidacaoUsuario() {
-  return <div></div>;
+  return (
+    <div>
+      <FormCarteirinha />
+    </div>
+  );
 }
 
 export default ValidacaoUsuario;
