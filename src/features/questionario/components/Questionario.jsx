@@ -14,7 +14,7 @@ import {
   QuestionnaireProgress,
 } from "@/components/ui/questionnaire";
 
-import { QuestionnaireData } from "./QuestionnaireData";
+import { QuestionnaireData } from "@/features/questionario/QuestionnaireData";
 
 export function Questionario() {
   const mensagensErro = {
@@ -38,7 +38,7 @@ export function Questionario() {
         className="w-full"
         render={(props, state) => (
           <div {...props}>
-            <div className="mb-2 flex gap-1.5" aria-hidden="true">
+            <div className="mb-0.5 flex gap-1.5" aria-hidden="true">
               {Array.from({ length: state.total }, (_, index) => (
                 <span
                   key={index}
