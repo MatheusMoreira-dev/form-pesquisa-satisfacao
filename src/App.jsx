@@ -2,7 +2,7 @@ import PesquisaSatisfacao from "./pages/PesquisaSatisfacao";
 
 function App() {
   return (
-    <div className="size-full max-h-dvh flex flex-col items-center overflow-hidden">
+    <div className="h-dvh overflow-y-auto">
       <PesquisaSatisfacao />
     </div>
   );
