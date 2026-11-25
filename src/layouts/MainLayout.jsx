@@ -7,7 +7,7 @@ function MainLayout() {
     <main className="flex flex-col mx-auto min-h-full max-w-lg px-1 pt-[max(24px,env(safe-area-inset-top))] pb-[max(24px,env(safe-area-inset-bottom))]">
       <Card className="flex min-h-0 flex-col flex-1">
         <img
-          src="../public/capa.jpg"
+          src="../public/capa.webp"
           alt="Event cover"
           className="aspect-video w-full object-cover brightness-80  dark:brightness-40"
         />
