@@ -1,5 +1,6 @@
 import { Outlet } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
+import { Toaster } from "@/components/ui/toast";
 
 function MainLayout() {
   return (
@@ -15,6 +16,8 @@ function MainLayout() {
           <Outlet />
         </CardContent>
       </Card>
+
+      <Toaster />
     </main>
   );
 }

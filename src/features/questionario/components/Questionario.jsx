@@ -12,26 +12,59 @@ import {
   QuestionnaireTitle,
   QuestionnaireTextarea,
   QuestionnaireProgress,
+  QuestionnaireInput,
 } from "@/components/ui/questionnaire";
 
 import { QuestionnaireData } from "@/features/questionario/QuestionnaireData";
+import { enviarRespostas } from "../services/questionarioService";
+import { useLocation } from "react-router-dom";
+import { toast } from "@/components/ui/toast";
+import { Spinner } from "@/components/ui/spinner";
+import { useState } from "react";
 
 export function Questionario() {
+  const { state } = useLocation();
+  const [ultimaPagina, setUltimaPagina] = useState();
+  const [elogio, setElogio] = useState("");
+
   const mensagensErro = {
     single: "Escolha uma opção válida!",
     multiple: "Selecione pelo menos uma opção!",
   };
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
-    const respostas = new FormData(event.currentTarget);
-    console.log(Object.fromEntries(respostas.entries()));
+
+    const formData = new FormData(event.currentTarget);
+    const response = Object.fromEntries(formData.entries());
+    const payload = {
+      numeroCarteirinha: state?.numeroCarteirinha,
+      respostas: { ...response, elogio },
+    };
+
+    try {
+      await enviarRespostas(payload);
+      console.log(payload);
+    } catch (err) {
+      console.log(err);
+
+      toast.add({
+        title: "Erro no envio",
+        description: "Tente novamente mais tarde",
+        type: "error",
+        priority: "high",
+        timeout: 3000,
+      });
+    }
   }
 
   return (
     <Questionnaire
       className="flex min-h-0 flex-1 flex-col"
       items={QuestionnaireData.questions}
+      onItemChange={(item) => {
+        setUltimaPagina(item === QuestionnaireData.questions.at(-1)?.name);
+      }}
       onSubmit={handleSubmit}
     >
       <QuestionnaireProgress
@@ -54,7 +87,7 @@ export function Questionario() {
         )}
       />
 
-      {QuestionnaireData.questions.map((question, i) => (
+      {QuestionnaireData.questions.slice(0, -1).map((question, i) => (
         <QuestionnaireItem
           className="
                   data-active:animate-in
@@ -85,9 +118,9 @@ export function Questionario() {
               ))}
             </QuestionnaireChoices>
           ) : (
-            <QuestionnaireTextarea
-              aria-label={question.question}
+            <QuestionnaireInput
               required={question.required}
+              aria-label={question.question}
             />
           )}
 
@@ -97,6 +130,14 @@ export function Questionario() {
           </QuestionnaireError>
         </QuestionnaireItem>
       ))}
+
+      {ultimaPagina && (
+        <textarea
+          value={elogio}
+          onChange={(event) => setElogio(event.target.value)}
+          className="min-h-48 w-full resize-none rounded-2xl border border-input bg-input/30 px-3 py-2 text-sm"
+        />
+      )}
 
       <QuestionnaireActions className="shrink-0 flex items-center w-full">
         <QuestionnairePrevious className="flex-1">
