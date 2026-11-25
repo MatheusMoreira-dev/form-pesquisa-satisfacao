@@ -34,6 +34,8 @@ function FormCarteirinha() {
       const criada = await criarCarteirinha(data);
       if (criada) navigate("/pesquisa", { state: data });
     } catch (err) {
+      navigate("pesquisa-respondida");
+
       toast.add({
         title: "Você já respondeu a pesquisa.",
         type: "error",

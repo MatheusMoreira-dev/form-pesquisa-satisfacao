@@ -17,9 +17,8 @@ import {
 
 import { QuestionnaireData } from "@/features/questionario/QuestionnaireData";
 import { enviarRespostas } from "../services/questionarioService";
-import { useLocation } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { toast } from "@/components/ui/toast";
-import { Spinner } from "@/components/ui/spinner";
 import { useState } from "react";
 
 export function Questionario() {
@@ -36,14 +35,27 @@ export function Questionario() {
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
-    const response = Object.fromEntries(formData.entries());
+    const response = {};
+
+    for (const question of QuestionnaireData.questions.slice(0, -1)) {
+      if (question.type === "multiple") {
+        response[question.name] = formData.getAll(question.name);
+      } else {
+        response[question.name] = formData.get(question.name);
+      }
+    }
+
     const payload = {
       numeroCarteirinha: state?.numeroCarteirinha,
-      respostas: { ...response, elogio },
+      respostas: {
+        ...response,
+        elogio,
+      },
     };
 
     try {
       await enviarRespostas(payload);
+      Navigate("/pesquisa-respondida");
       console.log(payload);
     } catch (err) {
       console.log(err);
