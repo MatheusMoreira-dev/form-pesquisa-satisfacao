@@ -10,10 +10,11 @@ import {
   QuestionnairePrevious,
   QuestionnaireSubmit,
   QuestionnaireTitle,
-  QuestionnaireTextarea,
   QuestionnaireProgress,
   QuestionnaireInput,
 } from "@/components/ui/questionnaire";
+
+import { Spinner } from "@/components/ui/spinner";
 
 import { QuestionnaireData } from "@/features/questionario/QuestionnaireData";
 import { enviarRespostas } from "../services/questionarioService";
@@ -23,6 +24,7 @@ import { useState } from "react";
 
 export function Questionario({ cliente }) {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const [ultimaPagina, setUltimaPagina] = useState();
   const [elogio, setElogio] = useState("");
 
@@ -54,15 +56,20 @@ export function Questionario({ cliente }) {
     };
 
     try {
+      setLoading(true);
       await enviarRespostas(payload);
+      setLoading(false);
       navigate("/pesquisa-respondida");
       console.log(payload);
     } catch (err) {
+      setLoading(false);
+      navigate("/");
       console.log(err);
 
       toast.add({
         title: "Erro no envio",
-        description: "Tente novamente mais tarde",
+        description:
+          "Não é possível responder a pesquisa com esse número de cartão Unimed",
         type: "error",
         priority: "high",
         timeout: 3000,
@@ -160,13 +167,14 @@ export function Questionario({ cliente }) {
       )}
 
       <QuestionnaireActions className="shrink-0 flex items-center w-full">
-        <QuestionnairePrevious className="flex-1">
+        <QuestionnairePrevious className="flex-1" disabled={loading}>
           Anterior
         </QuestionnairePrevious>
 
         <QuestionnaireNext className="flex-1">Próxima</QuestionnaireNext>
-        <QuestionnaireSubmit className="flex-2">
-          Enviar Resposta
+
+        <QuestionnaireSubmit className="flex-2" disabled={loading}>
+          {!loading ? "Enviar resposta" : <Spinner />}
         </QuestionnaireSubmit>
       </QuestionnaireActions>
     </Questionnaire>
