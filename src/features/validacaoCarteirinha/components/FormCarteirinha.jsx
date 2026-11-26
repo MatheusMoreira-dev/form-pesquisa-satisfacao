@@ -26,7 +26,7 @@ function FormCarteirinha() {
     formState: { errors, isSubmitting },
   } = useForm({
     mode: "onChange",
-    defaultValues: { nomeCompleto: "", numeroCarteirinha: "0107" },
+    defaultValues: { nomeCompleto: "", numeroCarteirinha: "" },
   });
 
   async function onSubmit(data) {
@@ -119,17 +119,10 @@ function FormCarteirinha() {
                   maxLength={17}
                   aria-invalid={fieldState.invalid}
                   onChange={(e) => {
-                    // 1. Mantém apenas números
+                    // Mantém apenas números
                     let valor = e.target.value.replace(/\D/g, "");
 
-                    // 2. Se o usuário tentar apagar ou alterar o 0107, restaura o prefixo
-                    if (!valor.startsWith("0107")) {
-                      // Remove qualquer pedaço remanescente do prefixo se tentou apagar por trás
-                      const sufixo = valor.replace(/^0?1?0?7?/, "");
-                      valor = "0107" + sufixo;
-                    }
-
-                    // 3. Limita a 17 dígitos no total e atualiza o formulário
+                    // Limita a 17 dígitos no total e atualiza o formulário
                     field.onChange(valor.slice(0, 17));
                   }}
                 />
