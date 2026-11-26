@@ -17,12 +17,12 @@ import {
 
 import { QuestionnaireData } from "@/features/questionario/QuestionnaireData";
 import { enviarRespostas } from "../services/questionarioService";
-import { Navigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "@/components/ui/toast";
 import { useState } from "react";
 
-export function Questionario() {
-  const { state } = useLocation();
+export function Questionario({ cliente }) {
+  const navigate = useNavigate();
   const [ultimaPagina, setUltimaPagina] = useState();
   const [elogio, setElogio] = useState("");
 
@@ -46,7 +46,7 @@ export function Questionario() {
     }
 
     const payload = {
-      numeroCarteirinha: state?.numeroCarteirinha,
+      numeroCarteirinha: cliente?.numeroCarteirinha,
       respostas: {
         ...response,
         elogio,
@@ -55,7 +55,7 @@ export function Questionario() {
 
     try {
       await enviarRespostas(payload);
-      Navigate("/pesquisa-respondida");
+      navigate("/pesquisa-respondida");
       console.log(payload);
     } catch (err) {
       console.log(err);
@@ -144,11 +144,19 @@ export function Questionario() {
       ))}
 
       {ultimaPagina && (
-        <textarea
-          value={elogio}
-          onChange={(event) => setElogio(event.target.value)}
-          className="min-h-48 w-full resize-none rounded-2xl border border-input bg-input/30 px-3 py-2 text-sm"
-        />
+        <div>
+          <h1 className="font-heading text-base font-semibold text-pretty">
+            Deixei aqui um eleogio ou sugestão
+          </h1>
+          <p className="text-xs text-pretty text-muted-foreground mb-5">
+            (Opcional)
+          </p>
+          <textarea
+            value={elogio}
+            onChange={(event) => setElogio(event.target.value)}
+            className="min-h-48 w-full resize-none rounded-2xl border border-input bg-input/30 px-3 py-2 text-sm"
+          />
+        </div>
       )}
 
       <QuestionnaireActions className="shrink-0 flex items-center w-full">

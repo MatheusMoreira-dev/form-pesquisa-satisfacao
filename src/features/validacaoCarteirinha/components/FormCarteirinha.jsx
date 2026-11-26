@@ -32,7 +32,7 @@ function FormCarteirinha() {
   async function onSubmit(data) {
     try {
       const criada = await criarCarteirinha(data);
-      if (criada) navigate("/pesquisa", { state: data });
+      if (criada) navigate("/pesquisa", { state: { cliente: data } });
     } catch (err) {
       navigate("pesquisa-respondida");
 
