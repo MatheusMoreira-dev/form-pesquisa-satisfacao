@@ -159,7 +159,7 @@ export function Questionario({ cliente }) {
       {ultimaPagina && (
         <div>
           <h1 className="font-heading text-base font-semibold text-pretty">
-            Deixei aqui um eleogio ou sugestão
+            Deixe aqui um elogio, sugestão ou algo que possamos melhorar
           </h1>
           <p className="text-xs text-pretty text-muted-foreground mb-5">
             (Opcional)
