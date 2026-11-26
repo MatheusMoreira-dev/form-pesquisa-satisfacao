@@ -42,7 +42,7 @@ export function Questionario({ cliente }) {
 
     for (const question of QuestionnaireData.questions.slice(0, -1)) {
       if (question.type === "multiple") {
-        response[question.name] = formData.getAll(question.name);
+        response[question.name] = formData.getAll(question.name).join(", ");
       } else {
         response[question.name] = formData.get(question.name);
       }
@@ -59,7 +59,10 @@ export function Questionario({ cliente }) {
     try {
       setLoading(true);
       await enviarRespostas(payload);
-      await enviarParaPlanilha(payload);
+      await enviarParaPlanilha([
+        payload.numeroCarteirinha,
+        ...Object.values(payload.respostas),
+      ]);
 
       setLoading(false);
       navigate("/pesquisa-respondida");
