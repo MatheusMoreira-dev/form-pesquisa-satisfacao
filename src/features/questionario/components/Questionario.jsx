@@ -21,6 +21,7 @@ import { enviarRespostas } from "../services/questionarioService";
 import { useNavigate } from "react-router-dom";
 import { toast } from "@/components/ui/toast";
 import { useState } from "react";
+import { enviarParaPlanilha } from "@/services/planilha";
 
 export function Questionario({ cliente }) {
   const navigate = useNavigate();
@@ -58,6 +59,8 @@ export function Questionario({ cliente }) {
     try {
       setLoading(true);
       await enviarRespostas(payload);
+      await enviarParaPlanilha(payload);
+
       setLoading(false);
       navigate("/pesquisa-respondida");
       console.log(payload);
